@@ -1,5 +1,7 @@
 # onAbort(signal, ...handles)
 
+<img src="https://github.com/fregante/abort-utils/assets/1402241/6c7b6bd3-aca4-4b28-b804-84ba8a35048f" width="300">
+
 It can link a signal to any number of controller, observer and callbacks. This will also automatically handle pre-aborted signals, unlike the standard `signal.addEventListener('abort', fn)` pattern.
 
 ```ts

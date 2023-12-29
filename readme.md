@@ -14,6 +14,7 @@ npm install abort-utils
 import {
 	onAbort,
 	mergeSignals,
+	linkControllers,
 	promiseFromSignal
 } from 'abort-utils';
 ```
