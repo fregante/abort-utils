@@ -1,6 +1,6 @@
 # mergeSignals(...signals)
 
-It can combine multiple signals into new signal. Ideal when:
+Returns an `AbortSignal` that aborts when any of the input is aborted. Ideal when:
 
 - you want to **add** a timeout signal
 - you receive a `signal` and want to have your own internal abort controller.

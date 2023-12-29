@@ -9,6 +9,7 @@
 		"callback",
 		"combine",
 		"merge",
+		"promise",
 		"event"
 	],
 	"repository": "fregante/abort-utils",

@@ -1,6 +1,6 @@
 # promiseFromSignal(signal, {rejects})
 
-It returns a promise that resolves or rejects when the signal is aborted. This lets you await a signal or combine it with other promises.
+Returns a `Promise` that resolves or rejects when the signal is aborted. This lets you await a signal or combine it with other promises.
 
 The promise will use the abort reason as a resolved/rejected value.
 
