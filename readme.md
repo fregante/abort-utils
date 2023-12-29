@@ -32,7 +32,7 @@ This package exports various utilities, just import what you need.
 
 Here's a visual representation that might help understand how some of the methods differ and behave.
 
-<img src="https://github.com/fregante/abort-utils/assets/1402241/e70d6ac6-f2e5-43d0-96b3-790a419b57c4" width="300">
+[<img src="https://github.com/fregante/abort-utils/assets/1402241/e70d6ac6-f2e5-43d0-96b3-790a419b57c4" width="400">](https://codepen.io/fregante/pen/mdoJKMo)
 
 ## License
 

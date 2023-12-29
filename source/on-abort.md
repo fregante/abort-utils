@@ -41,4 +41,8 @@ Type: `function`, `AbortController`, `MutationObserver`, `IntersectionObserver`,
 
 Each received handle will be called, disconnected, or aborted, depending on its type.
 
+## Demo
+
+<img src="https://github.com/fregante/abort-utils/assets/1402241/6c7b6bd3-aca4-4b28-b804-84ba8a35048f" width="300">
+
 ## [Main page ⏎](../readme.md)

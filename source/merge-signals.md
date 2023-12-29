@@ -1,7 +1,5 @@
 # mergeSignals(...signals)
 
-<img src="https://github.com/fregante/abort-utils/assets/1402241/6f5368ca-de69-4ca3-862d-e73749ad3a31" width="300">
-
 Returns an `AbortSignal` that aborts when any of the input is aborted. Ideal when:
 
 - you want to **add** a timeout signal
@@ -31,5 +29,9 @@ mergedSignal.addEventListener('abort', () => {
 Type: `AbortSignal`, `AbortController`
 
 The signals to listen to. If you pass a controller, it will automatically extract its signal.
+
+## Demo
+
+<img src="https://github.com/fregante/abort-utils/assets/1402241/6f5368ca-de69-4ca3-862d-e73749ad3a31" width="300">
 
 ## [Main page ⏎](../readme.md)
