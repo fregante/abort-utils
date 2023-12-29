@@ -1,0 +1,52 @@
+{
+	"name": "abort-utils",
+	"version": "0.0.0",
+	"description": "Utility functions to use and combine `AbortSignal` and `AbortController` with Promises",
+	"keywords": [
+		"abort",
+		"AbortController",
+		"AbortSignal",
+		"callback",
+		"combine",
+		"merge",
+		"event"
+	],
+	"repository": "fregante/abort-utils",
+	"funding": "https://github.com/sponsors/fregante",
+	"license": "MIT",
+	"author": "Federico Brigante <me@fregante.com> (https://fregante.com)",
+	"type": "module",
+	"exports": "./distribution/on-abort.js",
+	"main": "./distribution/on-abort.js",
+	"types": "./distribution/on-abort.d.ts",
+	"files": [
+		"distribution/on-abort.js",
+		"distribution/on-abort.d.ts"
+	],
+	"scripts": {
+		"build": "tsc",
+		"prepack": "tsc --sourceMap false",
+		"test": "tsc --noEmit && xo && tsd && vitest run",
+		"test:watch": "vitest",
+		"watch": "tsc --watch"
+	},
+	"xo": {
+		"envs": [
+			"browser"
+		]
+	},
+	"devDependencies": {
+		"@sindresorhus/tsconfig": "^5.0.0",
+		"@types/chrome": "^0.0.254",
+		"tsd": "^0.30.1",
+		"typescript": "^5.3.3",
+		"vitest": "^1.1.0",
+		"xo": "^0.56.0"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"tsd": {
+		"directory": "source"
+	}
+}
