@@ -5,17 +5,14 @@ It can link multiple controllers so that when one aborts, they all abort with th
 ```ts
 import {linkControllers} from 'abort-utils';
 
-// First signal
-const userAction = new AbortController();
+const controller1 = new AbortController();
+const controller2 = new AbortController();
+const controller3 = new AbortController();
 
-// Second signal
-const timeout = AbortSignal.timeout(100);
+linkControllers(controller1, controller2, controller3);
 
-// Merged signal
-const mergedSignal = mergeSignals(timeout, userAction.signal);
-mergedSignal.addEventListener('abort', () => {
-	console.log('One of the signals was aborted', mergedSignal.reason);
-});
+// Abort second controller and the others will also be aborted
+controller2.abort()
 ```
 
 ## controllers
