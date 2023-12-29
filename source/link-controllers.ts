@@ -1,17 +1,23 @@
-export function linkControllers(...controllers: AbortController[]): void {
-	const alreadyAborted = controllers.some(controller => controller.signal.aborted);
+function getSignal(controller: AbortController | AbortSignal): AbortSignal {
+	return controller instanceof AbortController ? controller.signal : controller;
+}
+
+export function linkControllers(...controllers: Array<AbortController | AbortSignal>): void {
+	const alreadyAborted = controllers.find(controller => getSignal(controller).aborted);
 
 	const onAbort = ({target}: Event) => {
 		for (const controller of controllers) {
-			controller.abort(target instanceof AbortSignal ? target.reason : undefined);
+			if (controller instanceof AbortController) {
+				controller.abort(target instanceof AbortSignal ? target.reason : undefined);
+			}
 		}
 	};
 
 	for (const controller of controllers) {
-		if (alreadyAborted) {
-			controller.abort(controller.signal.reason);
-		} else {
-			controller.signal.addEventListener('abort', onAbort, {once: true});
+		if (!alreadyAborted) {
+			getSignal(controller).addEventListener('abort', onAbort, {once: true});
+		} else if (controller instanceof AbortController) {
+			controller.abort(getSignal(alreadyAborted).reason);
 		}
 	}
 }
