@@ -16,12 +16,11 @@
 	"license": "MIT",
 	"author": "Federico Brigante <me@fregante.com> (https://fregante.com)",
 	"type": "module",
-	"exports": "./distribution/on-abort.js",
-	"main": "./distribution/on-abort.js",
-	"types": "./distribution/on-abort.d.ts",
+	"exports": "./distribution/index.js",
+	"main": "./distribution/index.js",
+	"types": "./distribution/index.d.ts",
 	"files": [
-		"distribution/on-abort.js",
-		"distribution/on-abort.d.ts"
+		"distribution"
 	],
 	"scripts": {
 		"build": "tsc",

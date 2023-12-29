@@ -36,7 +36,7 @@ export function onAbort(
 		// signal is already aborted. AbortSignal.abort()/.timeout() don't work the same way
 		const controller = new AbortController();
 		addListeners(controller.signal, handles);
-		controller.abort();
+		controller.abort(controller.signal.reason);
 	} else {
 		addListeners(signal, handles);
 	}
