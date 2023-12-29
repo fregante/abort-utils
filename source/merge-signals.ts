@@ -1,8 +1,10 @@
 export function mergeSignals(
-	...signals: Array<AbortSignal | undefined>
+	...signals: Array<AbortSignal | AbortController | undefined>
 ): AbortSignal {
 	const controller = new AbortController();
-	for (const signal of signals) {
+	for (const abort of signals) {
+		const signal = abort instanceof AbortController ? abort.signal : abort;
+
 		if (signal?.aborted) {
 			controller.abort(signal.reason);
 			return controller.signal;

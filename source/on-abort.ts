@@ -23,21 +23,21 @@ function addListeners(signal: AbortSignal, handles: Handle[]) {
 
 export function onAbort(
 	// Accept `undefined` to replicate the common `signal?.addEventListener()` pattern
-	abort: AbortController | AbortSignal | undefined,
+	signal: AbortController | AbortSignal | undefined,
 	...handles: Handle[]
 ): void {
-	if (!abort) {
+	if (!signal) {
 		return;
 	}
 
-	const signal = abort instanceof AbortController ? abort.signal : abort;
-	if (signal.aborted) {
+	const trueSignal = signal instanceof AbortController ? signal.signal : signal;
+	if (trueSignal.aborted) {
 		// This pattern ensures that handlers are treated the same way even if the
 		// signal is already aborted. AbortSignal.abort()/.timeout() don't work the same way
 		const controller = new AbortController();
 		addListeners(controller.signal, handles);
 		controller.abort(controller.signal.reason);
 	} else {
-		addListeners(signal, handles);
+		addListeners(trueSignal, handles);
 	}
 }

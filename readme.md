@@ -10,6 +10,13 @@
 ```sh
 npm install abort-utils
 ```
+```js
+import {
+	onAbort,
+	mergeSignals,
+	promiseFromSignal
+} from 'abort-utils';
+```
 
 ## Usage
 

@@ -8,15 +8,17 @@ It can combine multiple signals into new signal. Ideal when:
 ```ts
 import {mergeSignals} from 'abort-utils';
 
-const timeout = AbortSignal.timeout(100);
+// First signal
 const userAction = new AbortController();
-
 cancelButton.addEventListener('click', () => {
 	userAction.abort('User cancelled');
 });
 
-const mergedSignal = mergeSignals(timeout, userAction.signal);
+// Second signal
+const timeout = AbortSignal.timeout(100);
 
+// Merged signal
+const mergedSignal = mergeSignals(timeout, userAction.signal);
 mergedSignal.addEventListener('abort', () => {
 	console.log('One of the signals was aborted', mergedSignal.reason);
 });
@@ -24,6 +26,8 @@ mergedSignal.addEventListener('abort', () => {
 
 ## signals
 
-Type: `AbortSignal`
+Type: `AbortSignal`, `AbortController`
+
+The signals to listen to. If you pass a controller, it will automatically extract its signal.
 
 ## [Main page ⏎](../readme.md)
