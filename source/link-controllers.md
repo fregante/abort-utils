@@ -1,5 +1,7 @@
 # linkControllers(...controllers)
 
+<img src="https://github.com/fregante/abort-utils/assets/1402241/425db147-0feb-4e31-a8a0-0a458426a617" width="300">
+
 It can link multiple controllers so that when one aborts, they all abort with the same reason.
 
 ```ts
