@@ -1,13 +1,13 @@
 import {onAbort} from './on-abort.js';
 
 onAbort(undefined);
-onAbort(new AbortSignal());
-onAbort(new AbortSignal(), new AbortController());
+onAbort(AbortSignal.abort());
+onAbort(AbortSignal.abort(), new AbortController());
 onAbort(new AbortController());
 onAbort(new AbortController(), new AbortController());
 
-onAbort(new AbortSignal(), new MutationObserver(console.log));
-onAbort(new AbortSignal(), new IntersectionObserver(console.log));
-onAbort(new AbortSignal(), () => {
+onAbort(AbortSignal.abort(), new MutationObserver(console.log));
+onAbort(AbortSignal.abort(), new IntersectionObserver(console.log));
+onAbort(AbortSignal.abort(), () => {
 	// All good
 });
