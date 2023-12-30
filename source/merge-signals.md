@@ -1,3 +1,6 @@
+> [!NOTE]
+> [`AbortSignal.any()`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/any_static) is available natively in Chrome 116+ (but not in Firefox/Safari as of December 2023)
+
 # mergeSignals(...signals)
 
 Returns an `AbortSignal` that aborts when any of the input is aborted. Ideal when:
