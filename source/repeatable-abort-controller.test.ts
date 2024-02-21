@@ -13,7 +13,7 @@ it('should initially work like a regular AbortController', async () => {
 it('should reset the signal after aborting', async () => {
 	const controller = new RepeatableAbortController();
 	controller.abortAndReset();
-	expect(controller.signal.aborted).toBe(true);
+	expect(controller.signal.aborted).toBe(false);
 	controller.abortAndReset();
 	expect(controller.signal.aborted).toBe(false);
 });
