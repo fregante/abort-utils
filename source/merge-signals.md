@@ -1,5 +1,5 @@
 > [!NOTE]
-> [`AbortSignal.any()`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/any_static) is available natively in Chrome 116+ (but not in Firefox/Safari as of December 2023)
+> This utility is available natively as [`AbortSignal.any()`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/any_static). Chrome has supported it since August 2023, Node since June 2023 and Safari/Firefox since March 2024. Prefer using the native method if you don't need to support older browsers.
 
 # mergeSignals(...signals)
 
