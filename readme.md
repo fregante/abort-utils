@@ -15,7 +15,8 @@ import {
 	onAbort,
 	mergeSignals,
 	linkControllers,
-	promiseFromSignal
+	promiseFromSignal,
+	ReusableAbortController
 } from 'abort-utils';
 ```
 
@@ -27,6 +28,7 @@ This package exports various utilities, just import what you need.
 - [mergeSignals](./source/merge-signals.md): Create a new signal that aborts when any of the input signals aborts.
 - [linkControllers](./source/link-controllers.md): Link multiple controllers so that when one aborts, they all abort with the same reason.
 - [promiseFromSignal](./source/promise-from-signals.md): Create a Promise that resolves or rejects when the signal aborts.
+- [ReusableAbortController](./source/reusable-abort-controller.md): Like `AbortController`, but it generates a new signal after it's aborted.
 
 ## Demo
 
