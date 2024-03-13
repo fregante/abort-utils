@@ -1,5 +1,5 @@
 import {it, expect} from 'vitest';
-import {RepeatableAbortController} from './repeatable-abort-controller.js';
+import {RepeatableAbortController} from './reusable-abort-controller.js';
 
 it('should initially work like a regular AbortController', async () => {
 	const controller = new RepeatableAbortController();

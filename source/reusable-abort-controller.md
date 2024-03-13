@@ -1,11 +1,11 @@
-# RepeatableAbortController
+# ReusableAbortController
 
 This class is like `AbortController`, but it can be reused after it's aborted. The previous `signal` is aborted and discarded, and a new one takes its place.
 
 ```ts
-import {RepeatableAbortController} from 'abort-utils';
+import {ReusableAbortController} from 'abort-utils';
 
-const controller = new RepeatableAbortController();
+const controller = new ReusableAbortController();
 const firstSignal = controller.signal;
 
 fetch('/api/ping', {
