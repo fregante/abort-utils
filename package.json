@@ -17,11 +17,11 @@
 	"license": "MIT",
 	"author": "Federico Brigante <me@fregante.com> (https://fregante.com)",
 	"type": "module",
-	"exports": "./distribution/index.js",
-	"main": "./distribution/index.js",
-	"types": "./distribution/index.d.ts",
+	"exports": "./dist/index.js",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"files": [
-		"distribution"
+		"dist"
 	],
 	"scripts": {
 		"build": "tsc",
