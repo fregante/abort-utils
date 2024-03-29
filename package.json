@@ -1,6 +1,6 @@
 {
 	"name": "abort-utils",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Utility functions to use and combine `AbortSignal` and `AbortController` with Promises",
 	"keywords": [
 		"abort",
