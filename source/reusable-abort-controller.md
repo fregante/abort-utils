@@ -6,26 +6,21 @@ This class is like `AbortController`, but it can be reused after it's aborted. T
 import {ReusableAbortController} from 'abort-utils';
 
 const controller = new ReusableAbortController();
-const firstSignal = controller.signal;
 
 fetch('/api/ping', {
-	signal: firstSignal
+	signal: controller.signal
 });
 
 // The fetch request will be cancelled
 controller.abortAndReset();
-console.log(firstSignal.aborted)
-// ^ true
-
-
-// This will get a new signal, that is not aborted
-const secondSignal = controller.signal;
-console.log(secondSignal.aborted)
-// ^ false
 
 fetch('/api/ping', {
-	signal: secondSignal
+	// Same controller, new signal, not yet aborted
+	signal: controller.signal
 });
+
+// The second fetch request will be cancelled
+controller.abortAndReset();
 ```
 
 ## .abortAndReset(reason?: any)
