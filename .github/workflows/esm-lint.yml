@@ -1,6 +1,5 @@
 env:
-  IMPORT_TEXT: import
-  NPM_MODULE_NAME: abort-utils
+  IMPORT_STATEMENT: import "abort-utils"
 
 # FILE GENERATED WITH: npx ghat fregante/ghatemplates/esm-lint
 # SOURCE: https://github.com/fregante/ghatemplates
@@ -18,79 +17,88 @@ jobs:
   Pack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: npm install
       - run: npm run build --if-present
       - run: npm pack --dry-run
       - run: npm pack | tail -1 | xargs -n1 tar -xzf
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: package
+  Publint:
+    runs-on: ubuntu-latest
+    needs: Pack
+    steps:
+      - uses: actions/download-artifact@v4
+      - run: npx publint ./artifact
   Webpack:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
-      - run: npm install ./artifact
-      - run: echo "${{ env.IMPORT_TEXT }} '${{ env.NPM_MODULE_NAME }}'" > index.js
+      - uses: actions/download-artifact@v4
+      - run: npm install --omit=dev ./artifact
+      - run: echo "$IMPORT_STATEMENT" > index.js
       - run: webpack --entry ./index.js
       - run: cat dist/main.js
   Parcel:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
-      - run: npm install ./artifact
-      - run: echo "${{ env.IMPORT_TEXT }} '${{ env.NPM_MODULE_NAME }}'" > index.js
+      - uses: actions/download-artifact@v4
+      - run: npm install --omit=dev ./artifact
+      - run: echo "$IMPORT_STATEMENT" > index.js
+      - run: >
+          echo '{"@parcel/resolver-default": {"packageExports": true}}' >
+          package.json
       - run: npx parcel@2 build index.js
       - run: cat dist/index.js
   Rollup:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
-      - run: npm install ./artifact rollup@2 @rollup/plugin-node-resolve
-      - run: echo "${{ env.IMPORT_TEXT }} '${{ env.NPM_MODULE_NAME }}'" > index.js
+      - uses: actions/download-artifact@v4
+      - run: npm install --omit=dev ./artifact rollup@4 @rollup/plugin-node-resolve
+      - run: echo "$IMPORT_STATEMENT" > index.js
       - run: npx rollup -p node-resolve index.js
   Vite:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
-      - run: npm install ./artifact
-      - run: >-
-          echo '<script type="module">${{ env.IMPORT_TEXT }} "${{
-          env.NPM_MODULE_NAME }}"</script>' > index.html
+      - uses: actions/download-artifact@v4
+      - run: npm install --omit=dev ./artifact
+      - run: echo '<script type="module">$IMPORT_STATEMENT</script>' > index.html
       - run: npx vite build
       - run: cat dist/assets/*
   esbuild:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
       - run: echo '{}' > package.json
-      - run: echo "${{ env.IMPORT_TEXT }} '${{ env.NPM_MODULE_NAME }}'" > index.js
-      - run: npm install ./artifact
+      - run: echo "$IMPORT_STATEMENT" > index.js
+      - run: npm install --omit=dev ./artifact
       - run: npx esbuild --bundle index.js
   TypeScript:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
-      - run: npm install ./artifact @sindresorhus/tsconfig
-      - run: echo "${{ env.IMPORT_TEXT }} '${{ env.NPM_MODULE_NAME }}'" > index.ts
-      - run: |
-          echo '{"extends":"@sindresorhus/tsconfig","files":["index.ts"]}' > tsconfig.json
-      - run: tsc
-      - run: cat index.js
+      - uses: actions/download-artifact@v4
+      - run: echo '{"type":"module"}' > package.json
+      - run: npm install --omit=dev ./artifact @sindresorhus/tsconfig
+      - run: echo "$IMPORT_STATEMENT" > index.ts
+      - run: >
+          echo '{"extends":"@sindresorhus/tsconfig","files":["index.ts"]}' >
+          tsconfig.json
+      - run: npx --package typescript -- tsc
+      - run: cat distribution/index.js
   Node:
     runs-on: ubuntu-latest
     needs: Pack
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
-      - run: echo "${{ env.IMPORT_TEXT }} '${{ env.NPM_MODULE_NAME }}'" > index.mjs
-      - run: npm install ./artifact
+          node-version-file: artifact/package.json
+      - run: echo "$IMPORT_STATEMENT" > index.mjs
+      - run: npm install --omit=dev ./artifact
       - run: node index.mjs
