@@ -13,7 +13,7 @@ void fetch('https://example.com', {
 
 Type: [`EventTarget`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)
 
-The target to attach the listener too. This can be any Element or other object that implements the `EventTarget` interface.
+The target to attach the listener to. This can be any Element or other object that implements the `EventTarget` interface.
 
 ## eventName
 

@@ -2,6 +2,10 @@ function getSignal(controller: AbortController | AbortSignal): AbortSignal {
 	return controller instanceof AbortController ? controller.signal : controller;
 }
 
+/**
+ * Link multiple controllers so that when one aborts, they all abort with the same reason.
+ * @param controllers The controllers to link.
+ */
 export function linkControllers(...controllers: Array<AbortController | AbortSignal>): void {
 	const alreadyAborted = controllers.find(controller => getSignal(controller).aborted);
 
