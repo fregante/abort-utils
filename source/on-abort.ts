@@ -4,7 +4,7 @@ type Handle =
 	| VoidFunction;
 
 function addListeners(signal: AbortSignal, handles: Handle[]) {
-	// Add one listener per `handle` because error don't block other listeners
+	// Add one listener per `handle` so that errors don't block other listeners
 	for (const handle of handles) {
 		const options = {once: true};
 		if ('disconnect' in handle) {
