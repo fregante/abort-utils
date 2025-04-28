@@ -1,6 +1,7 @@
 type Handle =
 	| {disconnect: VoidFunction}
 	| {abort: VoidFunction}
+	| {abortAndReset: VoidFunction}
 	| VoidFunction;
 
 function addListeners(signal: AbortSignal, handles: Handle[]) {
@@ -13,6 +14,9 @@ function addListeners(signal: AbortSignal, handles: Handle[]) {
 		} else if ('abort' in handle) {
 			// Like AbortController
 			signal.addEventListener('abort', handle.abort.bind(handle), options);
+		} else if ('abortAndReset' in handle) {
+			// Like ReusableAbortController
+			signal.addEventListener('abort', handle.abortAndReset.bind(handle), options);
 		} else if (typeof handle === 'function') {
 			signal.addEventListener('abort', handle, options);
 		} else {

@@ -42,11 +42,14 @@ test('it binds the object handles', () => {
 	const signal = AbortSignal.abort();
 	const callback1 = {disconnect: vi.fn(), otherData: 1};
 	const callback2 = {abort: vi.fn(), otherData: 2};
-	onAbort(signal, callback1, callback2);
+	const callback3 = {abortAndReset: vi.fn(), otherData: 3};
+	onAbort(signal, callback1, callback2, callback3);
 	expect(callback1.disconnect).toHaveBeenCalledTimes(1);
 	expect(callback1.disconnect.mock.instances[0]).toBe(callback1);
 	expect(callback2.abort).toHaveBeenCalledTimes(1);
 	expect(callback2.abort.mock.instances[0]).toBe(callback2);
+	expect(callback3.abortAndReset).toHaveBeenCalledTimes(1);
+	expect(callback3.abortAndReset.mock.instances[0]).toBe(callback3);
 });
 
 test('it will run all the handlers even if one throws', () => {
