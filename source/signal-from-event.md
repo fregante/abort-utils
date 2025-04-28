@@ -31,7 +31,7 @@ Options to pass to the `addEventListener` method (except `once`, which is always
 
 Type: `(event: Event) => boolean`
 
-A filter function that will be called with the event that triggered the listener. The signal will resolve only once the filter returns `true`.
+A filter function that will be called with the event that triggered the listener. The signal will resolve only once the filter returns `true`. This function can also be `async`.
 
 ```js
 // Remove listeners after the 5th click

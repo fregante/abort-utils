@@ -22,3 +22,20 @@ it('aborts when the event is dispatched with filter', async () => {
 	target.dispatchEvent(new MouseEvent('click', {button: 3}));
 	expect(signal.aborted).toBe(true);
 });
+
+it('aborts when the event is dispatched with async filter', async () => {
+	const target = new EventTarget();
+	const signal = signalFromEvent(target, 'click', {
+		filter: async event => event.button === 3,
+	});
+	expect(signal.aborted).toBe(false);
+
+	target.dispatchEvent(new MouseEvent('click', {button: 2}));
+	await Promise.resolve(); // Let the async filter resolve
+	expect(signal.aborted).toBe(false);
+
+	target.dispatchEvent(new MouseEvent('click', {button: 3}));
+	expect(signal.aborted).toBe(false);
+	await Promise.resolve(); // Let the async filter resolve
+	expect(signal.aborted).toBe(true);
+});

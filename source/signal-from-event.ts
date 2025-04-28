@@ -1,5 +1,5 @@
 export type SignalFromEventOptions<T extends Event> = Omit<AddEventListenerOptions, 'once'> & {
-	filter?: (event: T) => boolean;
+	filter?: (event: T) => boolean | Promise<boolean>;
 };
 
 /**
@@ -15,11 +15,21 @@ export function signalFromEvent<K extends string, T extends Event = K extends ke
 	{filter, ...options}: SignalFromEventOptions<T> = {},
 ): AbortSignal {
 	const controller = new AbortController();
-	target.addEventListener(event, ((event: T) => {
-		if (filter ? filter(event) : true) {
-			controller.abort(event);
-		}
-	}) as EventListener, {
+	const listener = filter
+		? async (event: T) => {
+			let shouldAbort = filter(event);
+			if (typeof shouldAbort === 'object' && 'then' in shouldAbort) {
+				shouldAbort = await shouldAbort;
+			}
+
+			if (shouldAbort) {
+				controller.abort(event);
+			}
+		} : () => {
+			controller.abort();
+		};
+
+	target.addEventListener(event, listener as EventListener, {
 		...options,
 		once: !filter,
 	});
