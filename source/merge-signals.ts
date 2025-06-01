@@ -1,3 +1,4 @@
+/** @deprecated Use AbortSignal.any() instead */
 export function mergeSignals(
 	...signals: Array<AbortSignal | AbortController | undefined>
 ): AbortSignal {
