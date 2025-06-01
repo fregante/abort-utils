@@ -10,9 +10,13 @@ import {promiseFromSignal} from './promise-from-signal.js';
  */
 export async function promiseRaceWithSignal(
 	promise: Promise<unknown>,
-	signal: AbortSignal | AbortController,
+	signal: AbortSignal | AbortController | undefined,
 	{abortRejects = false}: {abortRejects?: boolean} = {},
 ): Promise<unknown> {
+	if (!signal) {
+		return promise;
+	}
+
 	return Promise.race([
 		promise,
 		promiseFromSignal(signal, {rejects: abortRejects}),
