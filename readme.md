@@ -31,6 +31,7 @@ This package exports various utilities, just import what you need.
 - [abortAllAndClear](./source/abort-all-and-clear.md): Aborts all controllers in an Array/Set and empties it.
 - [signalFromPromise](./source/signal-from-promise.md): Create an `AbortSignal` that is aborted when a Promise is resolved or rejected.
 - [promiseFromSignal](./source/promise-from-signal.md): Create a Promise that resolves or rejects when the signal aborts.
+- [promiseRaceWithSignal](./source/promise-race-with-signal.md): Turns a Promise into an "abortable" promise.
 - [ReusableAbortController](./source/reusable-abort-controller.md): Like `AbortController`, but it generates a new signal after it's aborted.
 
 ## Demo
