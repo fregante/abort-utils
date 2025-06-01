@@ -6,13 +6,13 @@ import {promiseFromSignal} from './promise-from-signal.js';
  *
  * @param promise The promise to race against the signal
  * @param signal The signal to listen to. If you pass a controller, it will automatically extract its signal.
- * @param options.abortRejects If `true`, the promise will reject instead of resolve when the signal is aborted.
+ * @param options.abortRejects If `false`, the promise will resolve instead of reject when the signal is aborted.
  */
-export async function promiseRaceWithSignal(
-	promise: Promise<unknown>,
+async function promiseRaceWithSignal<T, AbortRejects extends boolean = true>(
+	promise: Promise<T>,
 	signal: AbortSignal | AbortController | undefined,
-	{abortRejects = false}: {abortRejects?: boolean} = {},
-): Promise<unknown> {
+	{abortRejects = true as AbortRejects}: {abortRejects?: AbortRejects} = {},
+): Promise<AbortRejects extends false ? T | unknown : T> {
 	if (!signal) {
 		return promise;
 	}
@@ -20,5 +20,7 @@ export async function promiseRaceWithSignal(
 	return Promise.race([
 		promise,
 		promiseFromSignal(signal, {rejects: abortRejects}),
-	]);
+	]) as Promise<AbortRejects extends false ? T | unknown : T>;
 }
+
+export {promiseRaceWithSignal};

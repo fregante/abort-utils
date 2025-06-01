@@ -11,21 +11,20 @@ it('resolves with promise result when promise wins', async () => {
 	await expect(result).resolves.toBe('success');
 });
 
-it('resolves with AbortError when signal aborts first', async () => {
+it('rejects with AbortError when signal aborts first', async () => {
 	const result = promiseRaceWithSignal(
 		setTimeout(100, 'too-late'),
 		AbortSignal.timeout(50),
-		{abortRejects: false},
 	);
-	await expect(result).resolves.toBeInstanceOf(DOMException);
+	await expect(result).rejects.toThrow(DOMException);
 });
 
-it('rejects when signal aborts first and abortRejects is true', async () => {
+it('resolves when signal aborts first and abortRejects is false', async () => {
 	await expect(promiseRaceWithSignal(
 		setTimeout(100, 'too-late'),
 		AbortSignal.timeout(50),
-		{abortRejects: true},
-	)).rejects.toThrow(DOMException);
+		{abortRejects: false},
+	)).resolves.toBeInstanceOf(DOMException);
 });
 
 it('accepts AbortController directly', async () => {
@@ -36,7 +35,7 @@ it('accepts AbortController directly', async () => {
 	);
 
 	controller.abort('based');
-	await expect(result).resolves.toBe('based');
+	await expect(result).rejects.toThrow('based');
 });
 
 it('propagates promise rejection', async () => {
@@ -55,7 +54,7 @@ it('handles already aborted signal', async () => {
 		setTimeout(100, 'too-late'),
 		controller.signal,
 	);
-	await expect(result).resolves.toBeInstanceOf(DOMException);
+	await expect(result).rejects.toThrow(DOMException);
 });
 
 it('handles already aborted signal with abortRejects', async () => {
