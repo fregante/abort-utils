@@ -1,17 +1,17 @@
-# promiseRaceWithAbort(promise, signal, {abortRejects})
+# promiseRaceWithSignal(promise, signal, {abortRejects})
 
 Like `Promise.race()`, but it accepts `AbortSignal` or `AbortController` instances. Think of this as a way to make a promise "abortable" (except that it doesn't actually abort the original promise).
 
 The promise will use the abort reason as a resolved/rejected value.
 
 ```ts
-import {promiseRaceWithAbort} from 'abort-utils';
+import {promiseRaceWithSignal} from 'abort-utils';
 
 // Resolves with the value of `existingPromise` or with the abort reason if the signal is aborted first
-await promiseRaceWithAbort(existingPromise, AbortSignal.timeout(100));
+await promiseRaceWithSignal(existingPromise, AbortSignal.timeout(100));
 
 // The abort signal can reject instead of resolving
-const promise = await promiseRaceWithAbort(
+const promise = await promiseRaceWithSignal(
 	existingPromise,
 	AbortSignal.timeout(100),
 	{abortRejects: true}
