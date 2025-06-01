@@ -5,7 +5,6 @@
  *
  * @param signal The signal to listen to. If you pass a controller, it will automatically extract its signal.
  * @param options.rejects If `true`, the promise will reject instead of resolve when the signal is aborted.
- * @returns
  */
 export async function promiseFromSignal(
 	signal: AbortSignal | AbortController,
