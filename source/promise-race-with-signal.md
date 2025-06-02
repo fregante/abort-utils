@@ -44,6 +44,6 @@ Type: `object`
 
 Type: `boolean`
 
-If `true`, the promise will reject instead of resolve when the signal is aborted.
+If `false`, the promise will resolve instead of reject when the signal is aborted.
 
 ## [Main page ⏎](../readme.md)
