@@ -1,12 +1,6 @@
-> [!NOTE]
-> This utility is available natively as [`AbortSignal.any()`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/any_static). Chrome has supported it since August 2023, Node since June 2023 and Safari/Firefox since March 2024. Prefer using the native method if you don't need to support older browsers.
-
 # mergeSignals(...signals)
 
-Returns an `AbortSignal` that aborts when any of the input is aborted. Ideal when:
-
-- you want to **add** a timeout signal
-- you receive a `signal` and want to have your own internal abort controller.
+Like `AbortSignals.any()`, except it accepts `AbortController` and `undefined`, making it easier to use with optional signals. It requires `AbortSignals.any()` to be available in your browser/platform.
 
 ```ts
 import {mergeSignals} from 'abort-utils';
@@ -21,7 +15,7 @@ cancelButton.addEventListener('click', () => {
 const timeout = AbortSignal.timeout(100);
 
 // Merged signal
-const mergedSignal = mergeSignals(timeout, userAction.signal);
+const mergedSignal = mergeSignals(timeout, userAction);
 mergedSignal.addEventListener('abort', () => {
 	console.log('One of the signals was aborted', mergedSignal.reason);
 });
@@ -29,7 +23,7 @@ mergedSignal.addEventListener('abort', () => {
 
 ## signals
 
-Type: `AbortSignal`, `AbortController`
+Type: `AbortSignal`, `AbortController`, `undefined`
 
 The signals to listen to. If you pass a controller, it will automatically extract its signal.
 

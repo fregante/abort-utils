@@ -1,20 +1,17 @@
-/** @deprecated Use AbortSignal.any() instead */
-export function mergeSignals(
-	...signals: Array<AbortSignal | AbortController | undefined>
-): AbortSignal {
-	const controller = new AbortController();
-	for (const abort of signals) {
-		const signal = abort instanceof AbortController ? abort.signal : abort;
+/** Like AbortSignal.any(), except it accepts `undefined` as well, so you can pass in optional signals without further logic */
+export function mergeSignals(...signals: Array<AbortSignal | {signal: AbortSignal} | undefined>): AbortSignal {
+	const adjusted = signals
+		.filter(Boolean)
+		.map(signal =>
+			signal instanceof AbortSignal
+				? signal
+				// @ts-expect-error idk what you're talking about, signal is not undefined
+				: signal.signal);
 
-		if (signal?.aborted) {
-			controller.abort(signal.reason);
-			return controller.signal;
-		}
-
-		signal?.addEventListener('abort', () => {
-			controller.abort(signal.reason);
-		}, {once: true});
+	if (adjusted.length === 1) {
+		// Return as is
+		return adjusted[0]!;
 	}
 
-	return controller.signal;
+	return AbortSignal.any(adjusted);
 }
