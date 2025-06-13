@@ -7,5 +7,11 @@ export function mergeSignals(...signals: Array<AbortSignal | {signal: AbortSigna
 				? signal
 				// @ts-expect-error idk what you're talking about, signal is not undefined
 				: signal.signal);
+
+	if (adjusted.length === 1) {
+		// Return as is
+		return adjusted[0]!;
+	}
+
 	return AbortSignal.any(adjusted);
 }
