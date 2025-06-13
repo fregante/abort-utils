@@ -9,9 +9,3 @@ export class ReusableAbortController {
 		this.controller = new AbortController();
 	}
 }
-
-/**
- * @deprecated Use `ReusableAbortController` instead.
-*/
-// eslint-disable-next-line @typescript-eslint/naming-convention -- Class
-export const RepeatableAbortController = ReusableAbortController;
