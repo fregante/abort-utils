@@ -25,7 +25,8 @@ export function signalFromEvent<K extends string, T extends Event = K extends ke
 			if (shouldAbort) {
 				controller.abort(event);
 			}
-		} : () => {
+		}
+		: () => {
 			controller.abort();
 		};
 
