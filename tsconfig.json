@@ -2,9 +2,8 @@
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
 		"rootDir": "./source",
-		"outDir": "./dist"
+		"outDir": "./dist",
+		"lib": ["ES2024", "DOM"]
 	},
-	"include": [
-		"source",
-	]
+	"include": ["source"]
 }
