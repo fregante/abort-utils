@@ -95,3 +95,22 @@ test('it will run all the handlers even if one throws (passing in a controller i
 	expect(callback1).toHaveBeenCalledTimes(1);
 	expect(callback2).toHaveBeenCalledTimes(1);
 });
+
+test('it passes reason to abort/abortAndReset methods but not to functions or disconnect', () => {
+	const reason = 'test-reason';
+	const controller = new AbortController();
+
+	const functionCallback = vi.fn();
+	const disconnectHandle = {disconnect: vi.fn()};
+	const abortHandle = {abort: vi.fn()};
+	const abortAndResetHandle = {abortAndReset: vi.fn()};
+
+	onAbort(controller.signal, functionCallback, disconnectHandle, abortHandle, abortAndResetHandle);
+
+	controller.abort(reason);
+
+	expect(functionCallback).toHaveBeenCalledWith(reason);
+	expect(disconnectHandle.disconnect).toHaveBeenCalledWith();
+	expect(abortHandle.abort).toHaveBeenCalledWith(reason);
+	expect(abortAndResetHandle.abortAndReset).toHaveBeenCalledWith(reason);
+});

@@ -1,47 +1,49 @@
-type Handle =
-	| {disconnect: VoidFunction}
-	| {abort: VoidFunction}
-	| {abortAndReset: VoidFunction}
-	| VoidFunction;
 
-function addListeners(signal: AbortSignal, handles: Handle[]) {
-	// Add one listener per `handle` so that errors don't block other listeners
-	for (const handle of handles) {
-		const options = {once: true};
-		if ('disconnect' in handle) {
-			// Like MutationObserver
-			signal.addEventListener('abort', handle.disconnect.bind(handle), options);
-		} else if ('abort' in handle) {
-			// Like AbortController
-			signal.addEventListener('abort', handle.abort.bind(handle), options);
-		} else if ('abortAndReset' in handle) {
-			// Like ReusableAbortController
-			signal.addEventListener('abort', handle.abortAndReset.bind(handle), options);
-		} else if (typeof handle === 'function') {
-			signal.addEventListener('abort', handle, options);
-		} else {
-			throw new TypeError('Invalid AbortSignal handle type');
-		}
+type Handle =
+	| {disconnect(): void}
+	| {abort(reason: any): void}
+	| {abortAndReset(reason: any): void}
+	| ((reason: any) => void);
+
+const createListener = (handle: Handle) => function (this: AbortSignal): void {
+	if (typeof handle === 'function') {
+		handle(this.reason);
+	} else if ('disconnect' in handle) {
+		handle.disconnect();
+	} else if ('abort' in handle) {
+		handle.abort(this.reason);
+	} else if ('abortAndReset' in handle) {
+		handle.abortAndReset(this.reason);
+	} else {
+		throw new TypeError('Invalid AbortSignal handle type');
 	}
-}
+};
 
 export function onAbort(
-	// Accept `undefined` to replicate the common `signal?.addEventListener()` pattern
 	signal: AbortController | AbortSignal | undefined,
 	...handles: Handle[]
 ): void {
-	if (!signal) {
+	if (!signal || handles.length === 0) {
 		return;
 	}
 
-	const trueSignal = signal instanceof AbortController ? signal.signal : signal;
-	if (trueSignal.aborted) {
-		// This pattern ensures that handlers are treated the same way even if the
-		// signal is already aborted. AbortSignal.abort()/.timeout() don't work the same way
-		const controller = new AbortController();
-		addListeners(controller.signal, handles);
-		controller.abort(controller.signal.reason);
-	} else {
-		addListeners(trueSignal, handles);
+	const inputSignal = signal instanceof AbortController ? signal.signal : signal;
+
+	// This pattern ensures that handlers are treated the same way even if the
+	// signal is already aborted
+	const preAbortedHelper = new AbortController();
+	const targetSignal = inputSignal.aborted
+		? preAbortedHelper.signal
+		: inputSignal;
+
+	for (const handle of handles) {
+		// Attach one listener per handle so that failures by one handle don't affect others
+		targetSignal.addEventListener('abort', createListener(handle), {
+			once: true,
+		});
+	}
+
+	if (inputSignal.aborted) {
+		preAbortedHelper.abort(inputSignal.reason);
 	}
 }
