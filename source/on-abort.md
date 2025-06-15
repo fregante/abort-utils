@@ -23,6 +23,11 @@ onAbort(signal, newController);
 
 // It can do all of that at once
 onAbort(signal, console.log, observer, newController);
+
+// Since v3.0.0 it returns a disposable object to avoid memory leaks
+// https://www.totaltypescript.com/typescript-5-2-new-keyword-using
+// Similar to node's method https://nodejs.org/api/events.html#eventsaddabortlistenersignal-listener
+using _ = onAbort(signal, console.log, observer, newController);
 ```
 
 ## signal
