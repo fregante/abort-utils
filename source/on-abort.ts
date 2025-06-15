@@ -22,11 +22,12 @@ const createListener = (handle: Handle) => function (this: AbortSignal): void {
 export function onAbort(
 	signal: AbortController | AbortSignal | undefined,
 	...handles: Handle[]
-): void {
+): {[Symbol.dispose](): void} | undefined {
 	if (!signal || handles.length === 0) {
 		return;
 	}
 
+	const cleanup = new AbortController();
 	const inputSignal = signal instanceof AbortController ? signal.signal : signal;
 
 	// This pattern ensures that handlers are treated the same way even if the
@@ -40,10 +41,15 @@ export function onAbort(
 		// Attach one listener per handle so that failures by one handle don't affect others
 		targetSignal.addEventListener('abort', createListener(handle), {
 			once: true,
+			signal: cleanup.signal,
 		});
 	}
 
 	if (inputSignal.aborted) {
 		preAbortedHelper.abort(inputSignal.reason);
 	}
+
+	return {
+		[Symbol.dispose]: cleanup.abort.bind(cleanup),
+	};
 }

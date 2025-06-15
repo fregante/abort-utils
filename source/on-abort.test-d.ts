@@ -11,3 +11,4 @@ onAbort(AbortSignal.abort(), new IntersectionObserver(console.log));
 onAbort(AbortSignal.abort(), () => {
 	// All good
 });
+using _: {[Symbol.dispose](): void} | undefined = onAbort(AbortSignal.abort());

@@ -114,3 +114,31 @@ test('it passes reason to abort/abortAndReset methods but not to functions or di
 	expect(abortHandle.abort).toHaveBeenCalledWith(reason);
 	expect(abortAndResetHandle.abortAndReset).toHaveBeenCalledWith(reason);
 });
+
+test('using: it should not call handlers before or after disposal', () => {
+	const controller = new AbortController();
+	const callback1 = vi.fn();
+	const callback2 = {disconnect: vi.fn()};
+
+	{
+		using _ = onAbort(controller.signal, callback1, callback2);
+		expect(callback1).not.toHaveBeenCalled();
+		expect(callback2.disconnect).not.toHaveBeenCalled();
+	}
+
+	expect(callback1).not.toHaveBeenCalled();
+	expect(callback2.disconnect).not.toHaveBeenCalled();
+	controller.abort();
+	expect(callback1).not.toHaveBeenCalled();
+	expect(callback2.disconnect).not.toHaveBeenCalled();
+});
+
+test('using: it works with already aborted signal', () => {
+	const signal = AbortSignal.abort();
+	const callback = vi.fn();
+
+	{
+		using _ = onAbort(signal, callback);
+		expect(callback).toHaveBeenCalledTimes(1);
+	}
+});
