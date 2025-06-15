@@ -109,7 +109,7 @@ test('it passes reason to abort/abortAndReset methods but not to functions or di
 
 	controller.abort(reason);
 
-	expect(functionCallback).toHaveBeenCalledWith();
+	expect(functionCallback).toHaveBeenCalledWith(reason);
 	expect(disconnectHandle.disconnect).toHaveBeenCalledWith();
 	expect(abortHandle.abort).toHaveBeenCalledWith(reason);
 	expect(abortAndResetHandle.abortAndReset).toHaveBeenCalledWith(reason);

@@ -3,11 +3,11 @@ type Handle =
 	| {disconnect(): void}
 	| {abort(reason: any): void}
 	| {abortAndReset(reason: any): void}
-	| (() => void);
+	| ((reason: any) => void);
 
 const createListener = (handle: Handle) => function (this: AbortSignal): void {
 	if (typeof handle === 'function') {
-		handle();
+		handle(this.reason);
 	} else if ('disconnect' in handle) {
 		handle.disconnect();
 	} else if ('abort' in handle) {
