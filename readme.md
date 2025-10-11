@@ -26,6 +26,7 @@ This package exports various utilities, just import what you need.
 
 - [onAbort](./source/on-abort.md): Add multiple callbacks, observers and other abort controllers to a single signal.
 - [mergeSignals](./source/merge-signals.md): Create a new signal that aborts when any of the input signals aborts.
+- [timeoutSignal](./source/timeout-signal.md): Like `AbortSignal.timeout()`, but it throws a `TimeoutError` with a customizable message.
 - [linkControllers](./source/link-controllers.md): Link multiple controllers so that when one aborts, they all abort with the same reason.
 - [signalFromEvent](./source/signal-from-event.md): Create an `AbortSignal` that is aborted when an event is dispatched.
 - [abortAllAndClear](./source/abort-all-and-clear.md): Aborts all controllers in an Array/Set and empties it.
