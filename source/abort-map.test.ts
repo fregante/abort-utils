@@ -1,12 +1,12 @@
 import {setTimeout} from 'node:timers/promises';
 import {it, expect} from 'vitest';
-import {AbortMap, AbortWeakMap, AbortSet} from './abort-map.js';
+import {AbortMap, AbortWeakMap, AbortSet} from './index.js';
 
 it('AbortMap should remove entries when signal is aborted', async () => {
 	const map = new AbortMap<string, number>();
 	const controller = new AbortController();
 
-	map.setAbortable('key1', controller.signal, 42);
+	map.set('key1', controller.signal, 42);
 	expect(map.has('key1')).toBe(true);
 	expect(map.get('key1')).toBe(42);
 
@@ -21,7 +21,7 @@ it('AbortMap should remove entries when signal is aborted', async () => {
 it('AbortMap should handle timeout signal', async () => {
 	const map = new AbortMap<string, string>();
 
-	map.setAbortable('timeout-key', AbortSignal.timeout(50), 'value');
+	map.set('timeout-key', AbortSignal.timeout(50), 'value');
 	expect(map.has('timeout-key')).toBe(true);
 
 	await setTimeout(100);
@@ -33,7 +33,7 @@ it('AbortMap should handle already aborted signal', async () => {
 	const map = new AbortMap<string, string>();
 	const signal = AbortSignal.abort();
 
-	map.setAbortable('aborted-key', signal, 'value');
+	map.set('aborted-key', signal, 'value');
 
 	// The entry is removed immediately since the signal is already aborted
 	// Use setTimeout to allow the event loop to process
@@ -42,14 +42,13 @@ it('AbortMap should handle already aborted signal', async () => {
 	expect(map.has('aborted-key')).toBe(false);
 });
 
-it('AbortMap should allow using regular set method', () => {
+it('AbortMap should work like a regular Map when not using signals', () => {
 	const map = new AbortMap<string, number>();
 
 	map.set('regular-key', 100);
 	expect(map.has('regular-key')).toBe(true);
 	expect(map.get('regular-key')).toBe(100);
 
-	// Regular entries are not removed automatically
 	map.set('regular-key', 200);
 	expect(map.get('regular-key')).toBe(200);
 });
@@ -59,8 +58,8 @@ it('AbortMap should handle multiple entries with different signals', async () =>
 	const controller1 = new AbortController();
 	const controller2 = new AbortController();
 
-	map.setAbortable('key1', controller1.signal, 1);
-	map.setAbortable('key2', controller2.signal, 2);
+	map.set('key1', controller1.signal, 1);
+	map.set('key2', controller2.signal, 2);
 	expect(map.size).toBe(2);
 
 	controller1.abort();
@@ -82,7 +81,7 @@ it('AbortWeakMap should remove entries when signal is aborted', async () => {
 	const controller = new AbortController();
 	const key = {};
 
-	weakMap.setAbortable(key, controller.signal, 'test-value');
+	weakMap.set(key, controller.signal, 'test-value');
 	expect(weakMap.has(key)).toBe(true);
 	expect(weakMap.get(key)).toBe('test-value');
 
@@ -97,7 +96,7 @@ it('AbortWeakMap should handle timeout signal', async () => {
 	const weakMap = new AbortWeakMap<Record<string, unknown>, number>();
 	const key = {};
 
-	weakMap.setAbortable(key, AbortSignal.timeout(50), 42);
+	weakMap.set(key, AbortSignal.timeout(50), 42);
 	expect(weakMap.has(key)).toBe(true);
 
 	await setTimeout(100);
@@ -105,7 +104,7 @@ it('AbortWeakMap should handle timeout signal', async () => {
 	expect(weakMap.has(key)).toBe(false);
 });
 
-it('AbortWeakMap should allow using regular set method', () => {
+it('AbortWeakMap should work like a regular WeakMap when not using signals', () => {
 	const weakMap = new AbortWeakMap<Record<string, unknown>, string>();
 	const key = {};
 
@@ -118,7 +117,7 @@ it('AbortSet should remove entries when signal is aborted', async () => {
 	const set = new AbortSet<string>();
 	const controller = new AbortController();
 
-	set.addAbortable('item1', controller.signal);
+	set.add('item1', controller.signal);
 	expect(set.has('item1')).toBe(true);
 	expect(set.size).toBe(1);
 
@@ -132,7 +131,7 @@ it('AbortSet should remove entries when signal is aborted', async () => {
 it('AbortSet should handle timeout signal', async () => {
 	const set = new AbortSet<string>();
 
-	set.addAbortable('timeout-item', AbortSignal.timeout(50));
+	set.add('timeout-item', AbortSignal.timeout(50));
 	expect(set.has('timeout-item')).toBe(true);
 
 	await setTimeout(100);
@@ -144,7 +143,7 @@ it('AbortSet should handle already aborted signal', async () => {
 	const set = new AbortSet<number>();
 	const signal = AbortSignal.abort();
 
-	set.addAbortable(123, signal);
+	set.add(123, signal);
 
 	// The entry is removed immediately since the signal is already aborted
 	await setTimeout(0);
@@ -152,7 +151,7 @@ it('AbortSet should handle already aborted signal', async () => {
 	expect(set.has(123)).toBe(false);
 });
 
-it('AbortSet should allow using regular add method', () => {
+it('AbortSet should work like a regular Set when not using signals', () => {
 	const set = new AbortSet<string>();
 
 	set.add('regular-item');
@@ -165,8 +164,8 @@ it('AbortSet should handle multiple entries with different signals', async () =>
 	const controller1 = new AbortController();
 	const controller2 = new AbortController();
 
-	set.addAbortable(1, controller1.signal);
-	set.addAbortable(2, controller2.signal);
+	set.add(1, controller1.signal);
+	set.add(2, controller2.signal);
 	expect(set.size).toBe(2);
 
 	controller1.abort();

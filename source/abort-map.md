@@ -12,7 +12,7 @@ import {AbortMap} from 'abort-utils';
 const map = new AbortMap<string, any>();
 
 // Set a value that will be automatically removed after 40ms
-map.setAbortable('key', AbortSignal.timeout(40), 'value');
+map.set('key', AbortSignal.timeout(40), 'value');
 
 // After 40ms, the entry is automatically removed
 // map.has('key') === false
@@ -32,7 +32,7 @@ signal.addEventListener('abort', () => {
 });
 ```
 
-### .setAbortable(key, signal, value?)
+### .set(key, signal, value?)
 
 Sets a value in the map with an associated AbortSignal. When the signal is aborted, the entry is automatically deleted.
 
@@ -41,6 +41,10 @@ Sets a value in the map with an associated AbortSignal. When the signal is abort
 - **value**: The value to set (optional)
 
 Returns `this` for method chaining.
+
+### .set(key, value)
+
+The standard Map `.set()` method is also available for regular usage without automatic cleanup.
 
 ## AbortWeakMap
 
@@ -53,13 +57,13 @@ const weakMap = new AbortWeakMap<object, string>();
 const obj = {};
 
 // Set a value that will be automatically removed after 40ms
-weakMap.setAbortable(obj, AbortSignal.timeout(40), 'value');
+weakMap.set(obj, AbortSignal.timeout(40), 'value');
 
 // After 40ms, the entry is automatically removed
 // weakMap.has(obj) === false
 ```
 
-### .setAbortable(key, signal, value?)
+### .set(key, signal, value?)
 
 Sets a value in the weak map with an associated AbortSignal. When the signal is aborted, the entry is automatically deleted.
 
@@ -68,6 +72,10 @@ Sets a value in the weak map with an associated AbortSignal. When the signal is 
 - **value**: The value to set (optional)
 
 Returns `this` for method chaining.
+
+### .set(key, value)
+
+The standard WeakMap `.set()` method is also available for regular usage without automatic cleanup.
 
 ## AbortSet
 
@@ -79,7 +87,7 @@ import {AbortSet} from 'abort-utils';
 const set = new AbortSet<string>();
 
 // Add a value that will be automatically removed after 40ms
-set.addAbortable('item', AbortSignal.timeout(40));
+set.add('item', AbortSignal.timeout(40));
 
 // After 40ms, the entry is automatically removed
 // set.has('item') === false
@@ -88,12 +96,12 @@ set.addAbortable('item', AbortSignal.timeout(40));
 set.add('regular-item');
 ```
 
-### .addAbortable(value, signal)
+### .add(value, signal?)
 
-Adds a value to the set with an associated AbortSignal. When the signal is aborted, the entry is automatically deleted.
+Adds a value to the set. If a signal is provided, the entry is automatically deleted when the signal is aborted.
 
 - **value**: The value to add
-- **signal**: The AbortSignal to associate with this entry
+- **signal**: The AbortSignal to associate with this entry (optional)
 
 Returns `this` for method chaining.
 
