@@ -7,3 +7,4 @@ export * from './signal-from-event.js';
 export * from './signal-from-promise.js';
 export * from './abort-all-and-clear.js';
 export * from './promise-race-with-signal.js';
+export * from './abort-map.js';

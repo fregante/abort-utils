@@ -16,7 +16,10 @@ import {
 	mergeSignals,
 	linkControllers,
 	promiseFromSignal,
-	ReusableAbortController
+	ReusableAbortController,
+	AbortMap,
+	AbortWeakMap,
+	AbortSet
 } from 'abort-utils';
 ```
 
@@ -34,6 +37,7 @@ This package exports various utilities, just import what you need.
 - [promiseFromSignal](./source/promise-from-signal.md): Create a Promise that resolves or rejects when the signal aborts.
 - [promiseRaceWithSignal](./source/promise-race-with-signal.md): Turns a Promise into an "abortable" promise.
 - [ReusableAbortController](./source/reusable-abort-controller.md): Like `AbortController`, but it generates a new signal after it's aborted.
+- [AbortMap, AbortWeakMap, AbortSet](./source/abort-map.md): Collections that automatically remove entries when their associated AbortSignal is aborted.
 
 ## Demo
 
